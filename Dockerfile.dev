@@ -1,0 +1,13 @@
+FROM node:18-alpine
+WORKDIR /app
+
+# Install all dependencies (for development)
+COPY package*.json ./
+RUN npm ci
+
+# Copy app source
+COPY . .
+
+ENV NODE_ENV=development
+EXPOSE 3001
+CMD ["npm", "start"]
