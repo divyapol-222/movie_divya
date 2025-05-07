@@ -33,6 +33,12 @@ function validateOrder(orderParam: any): 'ASC' | 'DESC' {
   }
   return 'ASC';
 }
+// Validate that the provided ID is a valid IMDb ID (e.g., "tt1234567")
+function validateImdbId(id: string): void {
+  if (!/^tt\d+$/i.test(id)) {
+    throw createError(400, 'Invalid IMDb ID');
+  }
+}
 
 router.get(
   '/',
@@ -44,6 +50,10 @@ router.get(
     } catch (err: any) {
       next(err);
     }
+function validateImdbId(id: string): void {
+  if (!/^tt\d+$/i.test(id)) {
+    throw createError(400, 'Invalid IMDb ID');
+  }
   }
 );
 
@@ -88,6 +98,7 @@ router.get(
       if (!id) {
         throw createError(400, 'IMDb ID is required');
       }
+      validateImdbId(id);
       const data = await getMovieDetails(id);
       res.json({ success: true, data });
     } catch (err: any) {

@@ -63,7 +63,10 @@ Defaults are:
 - `MOVIES_DB`: `db/movies.db`
 - `RATINGS_DB`: `db/ratings.db`
 - `LOG_LEVEL`: `debug` (development) or `info` (production)
-
+## Build
+```bash
+npm run build
+```
 ## Running the Server
 Start the API service:
 ```bash
