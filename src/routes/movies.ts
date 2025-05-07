@@ -45,15 +45,30 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const page = validatePage(req.query.page);
+      const order = validateOrder(req.query.order);
+      const { year, genre } = req.query;
+
+      if (year) {
+        const yearStr = String(year);
+        validateYear(yearStr);
+        const result = await listMoviesByYear(yearStr, page, order);
+        return res.json({ success: true, data: result.data, meta: { page: result.page } });
+      }
+
+      if (genre) {
+        const genreStr = String(genre);
+        if (!genreStr) {
+          throw createError(400, 'Genre is required');
+        }
+        const result = await listMoviesByGenre(genreStr, page);
+        return res.json({ success: true, data: result.data, meta: { page: result.page } });
+      }
+
       const result = await listAllMovies(page);
-      res.json({ success: true, data: result.data, meta: { page: result.page } });
+      return res.json({ success: true, data: result.data, meta: { page: result.page } });
     } catch (err: any) {
       next(err);
     }
-function validateImdbId(id: string): void {
-  if (!/^tt\d+$/i.test(id)) {
-    throw createError(400, 'Invalid IMDb ID');
-  }
   }
 );
 

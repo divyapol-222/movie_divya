@@ -78,9 +78,12 @@ The server listens on `http://localhost:$PORT` (default: 3001).
 Base URL: `http://localhost:3001/movies`
 
 ### GET /movies
-List all movies (paginated).
+List movies (paginated) with optional filtering.
 - Query parameters:
   - `page` (integer, default: 1)
+  - `year` (4-digit string, optional; filter by release year)
+  - `genre` (string, optional; filter by genre)
+  - `order` (string: `asc` or `desc`, optional; only applicable when filtering by year)
 - Response:
   ```json
   {
