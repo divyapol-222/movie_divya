@@ -13,7 +13,7 @@ export const start = (): void => {
   const server = app.listen(config.port, () => {
     console.log(`Server listening at port ${config.port}`);
   });
-  server.on('error', (err: any) => {
+  server.on('error', (err) => {
     console.error(err);
     process.exit(1);
   });

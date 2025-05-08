@@ -72,10 +72,10 @@ export const db = {
     /**
      * Execute a query that returns multiple rows.
      * @param {string} sql
-     * @param {Array<any>} [params]
-     * @returns {Promise<Array<any>>}
+     * @param {Array<unknown>} [params]
+     * @returns {Promise<Array<unknown>>}
      */
-    all(sql: string, params: any[] = []): Promise<any[]> {
+    all(sql: string, params = []) {
       const dbConn = getMoviesDb();
       return new Promise((resolve, reject) => {
         dbConn.all(sql, params, (err, rows) => {
@@ -87,10 +87,10 @@ export const db = {
     /**
      * Execute a query that returns a single row.
      * @param {string} sql
-     * @param {Array<any>} [params]
-     * @returns {Promise<any>}
+     * @param {Array<unknown>} [params]
+     * @returns {Promise<unknown>}
      */
-    get(sql: string, params: any[] = []): Promise<any> {
+    get(sql: string, params = []) {
       const dbConn = getMoviesDb();
       return new Promise((resolve, reject) => {
         dbConn.get(sql, params, (err, row) => {
@@ -104,10 +104,10 @@ export const db = {
     /**
      * Execute a ratings query that returns a single row.
      * @param {string} sql
-     * @param {Array<any>} [params]
-     * @returns {Promise<any>}
+     * @param {Array<unknown>} [params]
+     * @returns {Promise<unknown>}
      */
-    get(sql: string, params: any[] = []): Promise<any> {
+    get(sql: string, params = []) {
       const dbConn = getRatingsDb();
       return new Promise((resolve, reject) => {
         dbConn.get(sql, params, (err, row) => {

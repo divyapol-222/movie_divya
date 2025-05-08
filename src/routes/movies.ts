@@ -9,7 +9,7 @@ import createError from '../utils/createError';
 
 const router = Router();
 
-function validatePage(pageParam: any): number {
+function validatePage(pageParam): number {
   const page = pageParam ? parseInt(pageParam, 10) : 1;
   if (pageParam && (isNaN(page) || page < 1)) {
     throw createError(400, 'Invalid page');
@@ -23,7 +23,7 @@ function validateYear(year: string): void {
   }
 }
 
-function validateOrder(orderParam: any): 'ASC' | 'DESC' {
+function validateOrder(orderParam): 'ASC' | 'DESC' {
   if (orderParam) {
     const order = String(orderParam).toLowerCase();
     if (!['asc', 'desc'].includes(order)) {
@@ -66,7 +66,7 @@ router.get(
 
       const result = await listAllMovies(page);
       return res.json({ success: true, data: result.data, meta: { page: result.page } });
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
   }
@@ -82,7 +82,7 @@ router.get(
       const order = validateOrder(req.query.order);
       const result = await listMoviesByYear(year, page, order);
       res.json({ success: true, data: result.data, meta: { page: result.page } });
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
   }
@@ -99,7 +99,7 @@ router.get(
       const page = validatePage(req.query.page);
       const result = await listMoviesByGenre(genre, page);
       res.json({ success: true, data: result.data, meta: { page: result.page } });
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
   }
@@ -116,7 +116,7 @@ router.get(
       validateImdbId(id);
       const data = await getMovieDetails(id);
       res.json({ success: true, data });
-    } catch (err: any) {
+    } catch (err) {
       next(err);
     }
   }

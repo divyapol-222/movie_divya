@@ -16,10 +16,10 @@
 export default function createError(
   statusCode: number,
   message: string
-): Error & { statusCode: number; details?: any } {
+): Error & { statusCode: number; details?: unknown } {
   const err = new Error(message) as Error & {
     statusCode: number;
-    details?: any;
+    details?: unknown;
   };
   err.statusCode = statusCode;
   return err;

@@ -8,7 +8,7 @@ interface InjectOptions {
   method: string;
   url: string;
   headers?: Record<string, string>;
-  payload?: any;
+  payload?: unknown;
 }
 
 export interface TestableApp extends Express {
@@ -34,9 +34,10 @@ export default class AppFactory {
       });
     });
 
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-      if (err.statusCode) {
-        const errorResponse: any = {
+    app.use((err, req: Request, res: Response, next: NextFunction) => {
+      // Handle errors with HTTP status codes
+      if (err && err.statusCode) {
+        const errorResponse: { success: false; error: { message: string; details?: unknown } } = {
           success: false,
           error: { message: err.message },
         };
@@ -55,11 +56,15 @@ export default class AppFactory {
     app.inject = async (options: InjectOptions): Promise<SupertestResponse> => {
       return new Promise((resolve, reject) => {
         const originalListen = app.listen;
-        delete (app as any).listen;
-        const method = options.method.toLowerCase() as keyof (typeof request);
-        let req = (request(app) as any)[method](options.url);
+        // Prevent supertest from opening a real HTTP server
+        // @ts-ignore
+        delete app.listen;
+        const method = options.method.toLowerCase() as keyof typeof request;
+        // @ts-ignore
+        let req = request(app)[method](options.url);
 
-        (app as any).listen = originalListen;
+        // @ts-ignore
+        app.listen = originalListen;
 
         if (options.headers) {
           for (const [key, value] of Object.entries(options.headers)) {
@@ -70,9 +75,13 @@ export default class AppFactory {
           req = req.send(options.payload);
         }
 
-        req.end((err: any, res: SupertestResponse) => {
+        // Execute the request
+        // @ts-ignore
+        req.end((err, res: SupertestResponse) => {
           if (err) return reject(err);
-          (res as any).json = () => res.body;
+          // Add json() helper to return parsed body
+          // @ts-ignore
+          res.json = () => res.body;
           resolve(res);
         });
       });
